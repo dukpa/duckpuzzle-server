@@ -2,12 +2,15 @@ var createError = require('http-errors');
 var express = require('express');
 var logger = require('morgan');
 const config = require("config");
+const cors = require('cors');
 
 const mongoose = require("./loaders/mongoose");
 
 var router = require('./routes');
 
 var app = express();
+
+app.use(cors());
 
 if (!config.get("myprivatekey")) {
   console.error("FATAL ERROR: myprivatekey is not defined.");
