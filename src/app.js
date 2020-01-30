@@ -43,8 +43,12 @@ if (!config.get("myprivatekey")) {
       });
     }
     
-    if (!err || !err.status) {
+    if (!err) {
       err = createError(500);
+    }
+
+    if (!err.status) {
+      err.status = 500;
     }
 
     if (err.status === 500) {
