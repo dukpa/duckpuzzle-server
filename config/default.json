@@ -1,5 +1,0 @@
-{
-  "myprivatekey" : "myprivatekey",
-  "mongokey" : "mongodb+srv://DEV:JD085CBlRYEbgPVp@cluster0-0asml.mongodb.net/test?retryWrites=true&w=majority",
-  "port": 3001
-}

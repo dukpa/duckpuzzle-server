@@ -9,8 +9,7 @@ router.post("/", async (req, res, next) => {
     let token = await auth.login(email, password);
     res.send({
       token,
-      email,
-      password
+      email
     });
   } catch(e) {
     next(e);
