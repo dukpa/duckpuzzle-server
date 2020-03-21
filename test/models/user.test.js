@@ -91,7 +91,7 @@ describe('User', function() {
       assert.equal(error.details[0].message, '"email" must be a valid email');
     });
 
-    it('should accept value user', function() {
+    it('should accept valid user', function() {
       let {error} = validate({
         name: 'Fake Name',
         email: 'fake@email.com',
