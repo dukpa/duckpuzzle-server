@@ -2,10 +2,10 @@ const assert = require('assert');
 const Unit = require('models/unit');
 
 describe('Unit', function() {
-  let unit = new Unit({
-    type: 'volume',
-    shortName: 'mL',
-    longName: 'mililiters'
+  let unit;
+
+  before(async function() {
+    unit = await Unit.findOne({shortName: 'mL'});
   });
 
   describe('Schema', function() {

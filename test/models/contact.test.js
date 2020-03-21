@@ -2,13 +2,12 @@ const Contact = require('models/contact');
 const assert = require('assert');
 
 describe('Contact', function() {
-  let contact = new Contact({
-    firstName: 'Test',
-    middleName: 'T',
-    lastName: 'Testerson',
-    email: 'test@test.com',
-    phone: '555-555-5555'
-  })
+  let contact;
+
+  before(async function() {
+    contact = await Contact.findOne({lastName: 'Testerson'});
+  });
+
   describe('Schema', function() {
     it('has fields', function() {
       assert.equal(contact.firstName, 'Test');

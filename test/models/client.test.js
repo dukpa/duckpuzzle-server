@@ -1,15 +1,10 @@
 const Client = require('models/client');
-const Contact = require('models/contact');
 const assert = require('assert');
 
 describe('Client', function() {
-  let contact = new Contact({
-    firstName: 'Test',
-    lastName: 'Testerson',
-  });
-  let client = new Client({
-    name: 'Client Inc.',
-    contacts: [contact]
+  let client;
+  before(async function() {
+    client = await Client.findOne({name: 'Client Inc.'}).populate('contacts');
   });
 
   describe('Schema', function() {
@@ -18,7 +13,8 @@ describe('Client', function() {
     });
   
     it('should contain contacts', function() {
-      assert.deepEqual(client.contacts, [contact]);
+      assert.equal(client.contacts.length, 2);
+      assert.equal(client.contacts[0].lastName, 'Testerson');
     });
 
     it('should require name', function() {

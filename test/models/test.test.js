@@ -1,12 +1,10 @@
 const assert = require('assert');
-const loadMongoose = require('loaders/mongoose');
 const Test = require('models/test');
 
 describe('Test', function () {
   let test;
 
   before(async function() {
-    await loadMongoose(true);
     test = await Test.findOne({name: 'Cholesterol'});
   });
 
