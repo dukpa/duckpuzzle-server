@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "NODE_PATH=./src nodemon ./src/app.js",
-    "test": "NODE_PATH=./src mocha test --recursive --watch"
+    "test": "NODE_PATH=./src mocha test --recursive --watch",
+    "migrate-dev": "node ./migrations/dev.js"
   },
   "dependencies": {
     "@hapi/joi": "^17.1.1",
@@ -15,7 +16,7 @@
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.8.2",
+    "mongoose": "^5.9.5",
     "morgan": "~1.9.1"
   },
   "devDependencies": {

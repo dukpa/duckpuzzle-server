@@ -1,18 +1,24 @@
 const assert = require('assert');
+const loadMongoose = require('loaders/mongoose');
 const Test = require('models/test');
 
 describe('Test', function () {
-  let test = new Test({
-    name: 'Cholesterol'
+  let test;
+
+  before(async function() {
+    await loadMongoose(true);
+    test = await Test.findOne({name: 'Cholesterol'});
   });
 
-  it('should contain fields', function() {
-    assert.equal(test.name, 'Cholesterol');
-  });
-
-  it('should require name', function() {
-    let test = new Test();
-    let err = test.validateSync();
-    assert.ok(err.errors['name']);
+  describe('Schema', function() {
+    it('should contain fields', function() {
+      assert.equal(test.name, 'Cholesterol');
+    });
+  
+    it('should require name', function() {
+      let test = new Test();
+      let err = test.validateSync();
+      assert.ok(err.errors['name']);
+    });
   });
 });
