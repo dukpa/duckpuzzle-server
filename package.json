@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./src/app.js"
+    "start": "NODE_PATH=./src nodemon ./src/app.js",
+    "test": "NODE_PATH=./src mocha test --recursive --watch"
   },
   "dependencies": {
     "bcrypt": "^3.0.7",
@@ -18,6 +19,7 @@
     "morgan": "~1.9.1"
   },
   "devDependencies": {
+    "mocha": "^7.1.1",
     "nodemon": "^2.0.2"
   }
 }
