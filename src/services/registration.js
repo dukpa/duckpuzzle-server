@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const { User, validate } = require("../models/user");
+const { User, validate } = require("../models/static/user");
 
 const EMAIL_IN_ISE = {
   status: 400,

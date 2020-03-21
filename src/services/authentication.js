@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const config = require('config')
-const {User} = require('../models/user');
+const {User} = require('../models/static/user');
 
 const BAD_USER_PASS = {
   status: 401,

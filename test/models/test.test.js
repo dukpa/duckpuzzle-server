@@ -1,5 +1,5 @@
 const assert = require('assert');
-const Test = require('models/test');
+const Test = require('models/static/test');
 
 describe('Test', function () {
   let test;

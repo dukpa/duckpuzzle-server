@@ -5,7 +5,7 @@
   "scripts": {
     "start": "NODE_PATH=./src nodemon ./src/app.js",
     "test": "NODE_PATH=./src mocha test --recursive --watch",
-    "migrate-dev": "node ./migrations/dev.js"
+    "migrate-dev": "node ./migrations/dev/script.js"
   },
   "dependencies": {
     "@hapi/joi": "^17.1.1",

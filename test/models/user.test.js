@@ -1,5 +1,5 @@
 const assert = require('assert');
-const { User, validate } = require('models/user');
+const { User, validate } = require('models/static/user');
 
 describe('User', function() {
   describe('#Schema', function() {

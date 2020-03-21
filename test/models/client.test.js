@@ -1,4 +1,4 @@
-const Client = require('models/client');
+const Client = require('models/static/client');
 const assert = require('assert');
 
 describe('Client', function() {

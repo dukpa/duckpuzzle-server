@@ -1,4 +1,4 @@
-const Contact = require('models/contact');
+const Contact = require('models/static/contact');
 const assert = require('assert');
 
 describe('Contact', function() {

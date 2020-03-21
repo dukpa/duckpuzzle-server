@@ -1,10 +1,9 @@
 const mongoose = require("mongoose");
-const loadMongoose = require('../src/loaders/mongoose');
 
 const data = [
   {
     name: 'Test',
-    path: '../src/models/test',
+    path: '../../src/models/static/test',
     items: [
       {
         name: 'Cholesterol'
@@ -19,7 +18,7 @@ const data = [
   },
   {
     name: 'Unit',
-    path: '../src/models/unit',
+    path: '../../src/models/static/unit',
     items: [
       {
         type: 'volume',
@@ -35,7 +34,7 @@ const data = [
   },
   {
     name: 'Contact',
-    path: '../src/models/contact',
+    path: '../../src/models/static/contact',
     items: [
       {
         firstName: 'Test',
@@ -55,7 +54,7 @@ const data = [
   },
   {
     name: 'Client',
-    path: '../src/models/client',
+    path: '../../src/models/static/client',
     items: [
       {
         name: 'Client Inc.',
@@ -102,27 +101,28 @@ async function buildModelInstance(Model, data) {
 
 async function doMigration() {
   console.log('Beginning Dev data migration');
-  await loadMongoose();
-
-  await Promise.all(data.map(async (model) => {
+  for (let model of data) {
     console.log(`Migrating ${model.name}`);
     const Model = require(model.path);
     await Model.deleteMany({});
-    await Promise.all(model.items.map((item) => {
-      return buildModelInstance(Model, item)
-        .then(doc => doc.save());
-    }));
+    for (item of model.items) {
+      let instance = await buildModelInstance(Model, item);
+      await instance.save();
+    }
     console.log(`Done migrating ${model.name}`)
-  }));
-
-  console.log('Disconnecting from mongoose');
-  try {
-    await mongoose.disconnect();
-  } catch(e) {
-    console.error(e);
   }
+  // await Promise.all(data.map(async (model) => {
+  //   console.log(`Migrating ${model.name}`);
+  //   const Model = require(model.path);
+  //   await Model.deleteMany({});
+  //   await Promise.all(model.items.map((item) => {
+  //     return buildModelInstance(Model, item)
+  //       .then(doc => doc.save());
+  //   }));
+  //   console.log(`Done migrating ${model.name}`)
+  // }));
 
   console.log('Data migration complete');
 }
 
-doMigration();
+module.exports = doMigration;
