@@ -9,8 +9,8 @@
   },
   "dependencies": {
     "@hapi/joi": "^17.1.1",
-    "bcrypt": "^3.0.7",
-    "config": "^3.2.4",
+    "bcrypt": "^3.0.8",
+    "config": "^3.3.0",
     "cors": "^2.8.5",
     "debug": "~2.6.9",
     "express": "~4.16.1",
