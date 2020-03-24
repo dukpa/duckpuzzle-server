@@ -20,4 +20,4 @@ const schema = new mongoose.Schema({
   phone: String
 });
 
-module.exports = mongoose.models.Contact || mongoose.model('Contact', schema);
+module.exports = mongoose.model('Contact', schema);

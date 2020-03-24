@@ -47,7 +47,7 @@ UserSchema.methods.setPassword = async function(password) {
   this.password = await bcrypt.hash(password, 10);
 }
 
-const User = mongoose.models.User || mongoose.model('User', UserSchema);
+const User = mongoose.model('User', UserSchema);
 
 function validateUser(user) {
   const schema = Joi.object({
