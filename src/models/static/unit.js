@@ -19,4 +19,4 @@ const schema = mongoose.Schema({
   }
 });
 
-module.exports = mongoose.models.Unit || mongoose.model('Unit', schema);
+module.exports = mongoose.model('Unit', schema);

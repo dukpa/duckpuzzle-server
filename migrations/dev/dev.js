@@ -78,6 +78,11 @@ const data = [
         ]
       }
     ]
+  },
+  {
+    name: 'Request',
+    path: '../../src/models/request/request',
+    items: []
   }
 ];
 
