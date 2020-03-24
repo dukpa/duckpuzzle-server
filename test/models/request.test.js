@@ -1,9 +1,9 @@
 const assert = require('assert');
 const Client = require('models/static/client');
 const Contact = require('models/static/contact');
-const Request = require('models/request/request');
+const {Request, RequestSample} = require('models/request');
 
-describe.only('Request', function() {
+describe('Request', function() {
   let request = new Request({
     requestNo: 'this is a test'
   });
@@ -64,6 +64,34 @@ describe.only('Request', function() {
         assert.equal(request.invoicingInfo.contact, client.contacts[0]);
         assert.equal(request.invoicingInfo.email, 'test@test.com');
         assert.equal(request.invoicingInfo.phone, '555-555-5555');
+      });
+    });
+
+    describe('#addSample', function() {
+      it('can add a sample by config', async function() {
+        let sample = request.addSample({
+          internalSampleNo: 'test1',
+          externalSampleNo: 'test2'
+        });
+        await sample.save();
+        await request.save();
+        request = await Request.findById(request.id).populate('samples');
+        assert.equal(request.samples[0].internalSampleNo, 'test1');
+        assert.equal(request.samples[0].externalSampleNo, 'test2');
+      });
+
+      it('can add a sample by ref', async function() {
+        let sample = new RequestSample({
+          internalSampleNo: 'test3',
+          externalSampleNo: 'test4'
+        });
+        let ret = request.addSample(sample);
+        assert.equal(sample, ret);
+        await sample.save();
+        await request.save();
+        request = await Request.findById(request.id).populate('samples');
+        assert.equal(request.samples[1].internalSampleNo, 'test3');
+        assert.equal(request.samples[1].externalSampleNo, 'test4');
       });
     });
   });
