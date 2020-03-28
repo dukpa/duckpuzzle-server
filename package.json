@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "NODE_PATH=./src nodemon ./src/app.js",
-    "test": "NODE_PATH=./src mocha",
+    "test": "NODE_PATH=./src mocha --inspect",
     "migrate-dev": "NODE_PATH=./src node ./migrations/dev/script.js"
   },
   "dependencies": {
