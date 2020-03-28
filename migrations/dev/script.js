@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
-const loadMongoose = require('../../src/loaders/mongoose');
-const doMigration = require('./dev.js');
+const loadMongoose = require('loaders/mongoose');
+const migrate = require('./dev.js');
 
 (async function() {
   await loadMongoose();
-  await doMigration();
+  await migrate();
 
   console.log('Disconnecting from mongoose');
   try {

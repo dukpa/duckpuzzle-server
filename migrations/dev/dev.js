@@ -1,133 +1,141 @@
 const mongoose = require("mongoose");
+const {Address, Client, Contact, Test, Unit, User} = require('models/static');
+const {Request} = require('models/request')
 
-const data = [
-  {
-    name: 'Test',
-    path: '../../src/models/static/test',
-    items: [
-      {
-        name: 'Cholesterol'
-      },
-      {
-        name: 'Blood Glucose'
-      },
-      {
-        name: 'Billirubin'
-      }
-    ]
-  },
-  {
-    name: 'Unit',
-    path: '../../src/models/static/unit',
-    items: [
-      {
-        type: 'volume',
-        shortName: 'mL',
-        longName: 'mililiters'
-      },
-      {
-        type: 'weight',
-        shortName: 'g',
-        longName: 'grams'
-      }
-    ]
-  },
-  {
-    name: 'Contact',
-    path: '../../src/models/static/contact',
-    items: [
-      {
-        firstName: 'Test',
-        middleName: 'T',
-        lastName: 'Testerson',
-        email: 'test@test.com',
-        phone: '555-555-5555'
-      },
-      {
-        firstName: 'Jigme',
-        middleName: 'S',
-        lastName: 'Dukpa',
-        email: 'jigme.dukpa@example.com',
-        phone: '123-456-7890'
-      }
-    ]
-  },
-  {
-    name: 'Client',
-    path: '../../src/models/static/client',
-    items: [
-      {
-        name: 'Client Inc.',
-        contacts: [
-          {
-            _model: 'Contact',
-            firstName: 'Test',
-            middleName: 'T',
-            lastName: 'Testerson',
-            email: 'test@test.com',
-            phone: '555-555-5555'
-          },
-          {
-            _model: 'Contact',
-            firstName: 'Jigme',
-            middleName: 'S',
-            lastName: 'Dukpa',
-            email: 'jigme.dukpa@example.com',
-            phone: '123-456-7890'
-          }
-        ]
-      }
-    ]
-  },
-  {
-    name: 'Request',
-    path: '../../src/models/request/request',
-    items: []
-  }
-];
-
-async function buildModelInstance(Model, data) {
-  let fields = Object.keys(data).filter(key => typeof data[key] !== 'object');
-  let joins = Object.keys(data).filter(key => typeof data[key] === 'object');
-  let config = {};
-  fields.forEach(key => config[key] = data[key]);
-  for (let key of joins) {
-    let children = data[key];
-    config[key] = [];
-    for (let child of children) {
-      let _model = mongoose.models[child._model];
-      delete child._model;
-      let _instance = await _model.findOne(child);
-      config[key].push(_instance);
+const data = {
+  tests: [
+    {
+      name: 'Cholesterol'
+    },
+    {
+      name: 'Blood Glucose'
+    },
+    {
+      name: 'Billirubin'
     }
-  }
-  return new Model(config);
+  ],
+  units: [
+    {
+      type: 'volume',
+      shortName: 'mL',
+      longName: 'mililiters'
+    },
+    {
+      type: 'weight',
+      shortName: 'g',
+      longName: 'grams'
+    }
+  ],
+  clients: [
+    {
+      name: 'Client Inc.',
+      contacts: [
+        {
+          firstName: 'Test',
+          middleName: 'T',
+          lastName: 'Testerson',
+          email: 'test@test.com',
+          phone: '555-555-5555',
+          address: {
+            address1: '1234 5th St',
+            address2: 'Suite 6',
+            city: 'Four City',
+            state: 'Florida',
+            zip: '67890'
+          }
+        },
+        {
+          firstName: 'Jigme',
+          middleName: 'S',
+          lastName: 'Dukpa',
+          email: 'jigme.dukpa@example.com',
+          phone: '123-456-7890',
+          address: {
+            address1: '321 Zero Ave',
+            city: 'Negative City',
+            state: 'New York',
+            zip: '11215'
+          }
+        }
+      ]
+    }
+  ],
+  requests: []
+};
+
+async function scrub() {
+  console.log('Scrubbing data');
+  let promises = mongoose.modelNames().map(async (modelName) => {
+    let model = mongoose.models[modelName];
+    console.log(`  Scrubbing ${modelName}`);
+    await model.deleteMany({});
+    console.log(`  Done scrubbing ${modelName}`);
+  });
+  await Promise.all(promises);
+  console.log('Done scrubbing data');
+}
+
+async function migrateTests() {
+  console.log('  Migrating tests');
+  let promises = data.tests.map(async (config) => {
+    let test = new Test(config);
+    await test.save();
+  });
+  await Promise.all(promises);
+  console.log('  Done migrating tests');
+}
+
+async function migrateUnits() {
+  console.log('  Migrating units');
+  let promises = data.units.map(async (config) => {
+    let unit = new Unit(config);
+    await unit.save();
+  });
+  await Promise.all(promises);
+  console.log('  Done migrating units');
+}
+
+async function migrateContacts(data) {
+  let contactPromises = data.map(async (data) => {
+    let address = new Address(data.address);
+    let contact = new Contact({
+      ...data,
+      address
+    });
+    await address.save();
+    await contact.save();
+    return contact;
+  });
+  return await Promise.all(contactPromises);
+}
+
+async function migrateClients() {
+  console.log('  Migrating clients');
+  let clientPromises = data.clients.map(async (data) => {
+    let contacts = await migrateContacts(data.contacts);
+    let client = new Client({
+      ...data,
+      contacts: contacts
+    });
+    await client.save();
+  });
+  await Promise.all(clientPromises);
+  console.log('  Done migrating clients');
 }
 
 async function doMigration() {
   console.log('Beginning Dev data migration');
-  for (let model of data) {
-    console.log(`Migrating ${model.name}`);
-    const Model = require(model.path);
-    await Model.deleteMany({});
-    for (item of model.items) {
-      let instance = await buildModelInstance(Model, item);
-      await instance.save();
-    }
-    console.log(`Done migrating ${model.name}`)
-  }
-  // await Promise.all(data.map(async (model) => {
-  //   console.log(`Migrating ${model.name}`);
-  //   const Model = require(model.path);
-  //   await Model.deleteMany({});
-  //   await Promise.all(model.items.map((item) => {
-  //     return buildModelInstance(Model, item)
-  //       .then(doc => doc.save());
-  //   }));
-  //   console.log(`Done migrating ${model.name}`)
-  // }));
-
+  await Promise.all([
+    migrateTests(),
+    migrateUnits(),
+    migrateClients()
+  ])
   console.log('Data migration complete');
 }
 
-module.exports = doMigration;
+async function migrate() {
+  await scrub();
+  await doMigration();
+}
+
+module.exports = migrate;
