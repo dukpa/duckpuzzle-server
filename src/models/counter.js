@@ -14,7 +14,7 @@ const schema = new mongoose.Schema({
 schema.statics.getNextValue = async function(type) {
   let counter = await this.findByIdAndUpdate(type,
     { $inc: { value: 1 } },
-    { upsert: true }
+    { new: true, upsert: true }
   );
   return counter.value;
 };

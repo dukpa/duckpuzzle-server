@@ -1,4 +1,7 @@
 const {Request} = require('models/request');
+const Counter = require('models/counter');
+
+const REQUEST_COUNTER = 'REQUEST';
 
 module.exports.createDraftRequest = async function createDraftRequest() {
   let request = new Request();
@@ -8,10 +11,5 @@ module.exports.createDraftRequest = async function createDraftRequest() {
 }
 
 async function getNextRequestNo() {
-  let request = await Request.findOne({}).sort('-requestNo');
-  if (request) {
-    let nextRequestNo = parseInt(request.requestNo) + 1;
-    return String(nextRequestNo);
-  }
-  return '1';
+  return await Counter.getNextValue(REQUEST_COUNTER);
 }
