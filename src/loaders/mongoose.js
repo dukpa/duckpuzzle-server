@@ -1,6 +1,8 @@
 const config = require("config");
 const mongoose = require("mongoose");
 
+mongoose.set('useFindAndModify', false);
+
 module.exports = async function load(silent) {
   try {
     silent || console.log("Connecting to MongoDB...")
