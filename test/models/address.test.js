@@ -30,5 +30,5 @@ describe('Address', function() {
       assert.equal(address.state, 'Florida');
       assert.equal(address.zip, '12345');
     });
-  })
+  });
 });
