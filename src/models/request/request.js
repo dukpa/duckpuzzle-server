@@ -13,7 +13,11 @@ const contactSchema = mongoose.Schema({
     ref: 'Contact'
   },
   email: String,
-  phone: String
+  phone: String,
+  address: {
+    type: ObjectId,
+    ref: 'Address'
+  }
 });
 
 const schema = new mongoose.Schema({

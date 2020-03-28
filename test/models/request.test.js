@@ -25,45 +25,59 @@ describe('Request', function() {
       }
     });
 
-    describe('contactInfo', function() {
+    describe('contactInfo', async function() {
       it('should contain fields', async function() {
-        let client = await Client.findOne({name: 'Client Inc.'});
+        let client = await Client.findOne({name: 'Client Inc.'})
+          .populate('contacts');
         assert.ok(client);
-        assert.ok(client.contacts[0])
-        let contact = await Contact.findOne({lastName: 'Dukpa'});
+        assert.ok(client.contacts[0]);
+        let contact = await Contact.findOne({lastName: 'Testerson'});
         assert.ok(contact);
         request.contactInfo = {
           client,
-          contact: client.contacts[0],
+          contact,
           email: 'test@test.com',
-          phone: '555-555-5555'
+          phone: '555-555-5555',
+          address: contact.address
         }
         await request.save();
-        assert.equal(request.contactInfo.client, client);
-        assert.equal(request.contactInfo.contact, client.contacts[0]);
+        request = await Request.findById(request.id)
+          .populate('contactInfo.client')
+          .populate('contactInfo.contact')
+          .populate('contactInfo.address');
+        assert.equal(request.contactInfo.client.name, 'Client Inc.');
+        assert.equal(request.contactInfo.contact.lastName, 'Testerson');
         assert.equal(request.contactInfo.email, 'test@test.com');
         assert.equal(request.contactInfo.phone, '555-555-5555');
+        assert.equal(request.contactInfo.address.address1, '1234 5th St');
       });
     });
 
     describe('invoicingInfo', function() {
       it('should contain fields', async function() {
-        let client = await Client.findOne({name: 'Client Inc.'});
+        let client = await Client.findOne({name: 'Client Inc.'})
+          .populate('contacts');
         assert.ok(client);
-        assert.ok(client.contacts[0])
-        let contact = await Contact.findOne({lastName: 'Dukpa'});
+        assert.ok(client.contacts[0]);
+        let contact = await Contact.findOne({lastName: 'Testerson'});
         assert.ok(contact);
         request.invoicingInfo = {
           client,
-          contact: client.contacts[0],
+          contact,
           email: 'test@test.com',
-          phone: '555-555-5555'
+          phone: '555-555-5555',
+          address: contact.address
         }
         await request.save();
-        assert.equal(request.invoicingInfo.client, client);
-        assert.equal(request.invoicingInfo.contact, client.contacts[0]);
+        request = await Request.findById(request.id)
+          .populate('invoicingInfo.client')
+          .populate('invoicingInfo.contact')
+          .populate('invoicingInfo.address');
+        assert.equal(request.invoicingInfo.client.name, 'Client Inc.');
+        assert.equal(request.invoicingInfo.contact.lastName, 'Testerson');
         assert.equal(request.invoicingInfo.email, 'test@test.com');
         assert.equal(request.invoicingInfo.phone, '555-555-5555');
+        assert.equal(request.invoicingInfo.address.address1, '1234 5th St');
       });
     });
 
