@@ -1,4 +1,5 @@
 const Contact = require('models/static/contact');
+const Address = require('models/static/address');
 const assert = require('assert');
 
 describe('Contact', function() {
@@ -22,6 +23,19 @@ describe('Contact', function() {
       let err = contact.validateSync();
       assert.ok(err.errors['firstName']);
       assert.ok(err.errors['lastName']);
+    });
+
+    it('has an address', async function() {
+      contact.address =  new Address({
+        address1: '1234 5th St',
+        city: 'Miami',
+        state: 'Florida',
+        zip: '33317'
+      });
+      await contact.address.save();
+      await contact.save();
+      contact = await Contact.findById(contact.id).populate('address');
+      assert.equal(contact.address.address1, '1234 5th St');
     });
   });
 });

@@ -17,7 +17,11 @@ const schema = new mongoose.Schema({
     minLength: 1
   },
   email: String,
-  phone: String
+  phone: String,
+  address: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: 'Address'
+  }
 });
 
 module.exports = mongoose.model('Contact', schema);
