@@ -7,7 +7,7 @@ module.exports.createDraftRequest = async function createDraftRequest() {
   let request = new Request();
   request.requestNo = await getNextRequestNo();
   await request.save();
-  return request.toObject();
+  return request;
 }
 
 async function getNextRequestNo() {
