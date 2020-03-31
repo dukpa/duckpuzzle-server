@@ -7,13 +7,20 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": [
-        "run-script",
-        "debug"
+      "name": "Mocha Tests",
+      "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+      "args": [
+        // "-u",
+        // "tdd",
+        "--timeout",
+        "999999",
+        "--colors",
+        "${workspaceFolder}/test"
       ],
-      "port": 9229,
+      "env": {
+        "NODE_PATH" : "./src"
+      },
+      "internalConsoleOptions": "openOnSessionStart",
       "skipFiles": [
         "<node_internals>/**"
       ]
@@ -21,11 +28,11 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Test with Debug",
+      "name": "Debug",
       "runtimeExecutable": "npm",
       "runtimeArgs": [
         "run-script",
-        "test"
+        "debug"
       ],
       "port": 9229,
       "skipFiles": [
