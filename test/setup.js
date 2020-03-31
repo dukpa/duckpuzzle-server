@@ -1,4 +1,8 @@
 const mongoose = require('mongoose');
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+chai.use(chaiHttp);
+
 const doMigration = require('../migrations/dev/dev')
 const loadMongoose = require('loaders/mongoose');
 
