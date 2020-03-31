@@ -1,11 +1,12 @@
-const assert = require('assert');
+const {expect} = require('chai');
 const {createDraftRequest} = require('services/request/request-service');
+const {Request} = require('models/request');
 
 describe('RequestService', function() {
   describe('#createDraftRequest', function() {
     it('should create a draft request', async function() {
       let request = await createDraftRequest();
-      assert.ok(request);
+      expect(request).to.be.instanceOf(Request);
     });
 
     it('should create sequential requestNo', async function() {
@@ -15,7 +16,7 @@ describe('RequestService', function() {
         requests.push(newRequest);
       }
       let requestNos = requests.map(request => request.requestNo);
-      assert.deepEqual(requestNos, requestNos.sort());
+      expect(requestNos).to.equal(requestNos.sort());
     });
 
     it('should always create unique requestNo', async function() {
@@ -31,11 +32,7 @@ describe('RequestService', function() {
       let requests = await Promise.all(promises);
       let requestNos = requests.map(request => request.requestNo).sort();
       requestNos.reduce((lastValue, value) => {
-        if (lastValue === value) {
-          assert.fail(`matching requestNos ${lastValue} and ${value}`);
-        } else {
-          assert.ok(true);
-        }
+        expect(lastValue).to.not.equal(value);
       });
     });
   });
