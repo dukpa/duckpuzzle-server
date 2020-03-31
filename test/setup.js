@@ -12,6 +12,7 @@ before(async function() {
 
 after(async function() {
   try {
+    mongoose.models = {};
     await mongoose.disconnect();
   } catch(e) {
     console.error(e);
