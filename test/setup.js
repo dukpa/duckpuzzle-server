@@ -8,7 +8,7 @@ const loadMongoose = require('loaders/mongoose');
 
 before(async function() {
   await loadMongoose();
-  await doMigration();
+  // await doMigration();
 
   console.log('');
   console.log('Mocha time')
