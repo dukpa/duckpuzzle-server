@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const {Address, Client, Contact, Test, Unit, User} = require('models/static');
-const {Request} = require('models/request')
+const {Request} = require('models/request');
+const {newUser} = require('services/registration');
 
 const data = {
   tests: [
@@ -123,12 +124,19 @@ async function migrateClients() {
   console.log('  Done migrating clients');
 }
 
+async function migrateUsers() {
+  console.log('  Adding test users');
+  await newUser({name: 'Tester', email: 'test@example.com', password: 'test'})
+  console.log('  Done adding test users');
+}
+
 async function doMigration() {
   console.log('Beginning Dev data migration');
   await Promise.all([
     migrateTests(),
     migrateUnits(),
-    migrateClients()
+    migrateClients(),
+    migrateUsers()
   ])
   console.log('Data migration complete');
 }
