@@ -18,7 +18,7 @@ function _buildResponse(req, data, error) {
 function buildResponse(req, data) {
   if (data instanceof mongoose.Document) {
     return _buildResponse(req, {
-      kind: data.modelName,
+      kind: data.constructor.modelName,
       items: [data.toObject()]
     });
   } else {
