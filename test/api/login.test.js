@@ -1,7 +1,7 @@
 const { expect, request } = require('chai');
 const app = require('app');
 
-describe.only('/login', function() {
+describe('/login', function() {
   it('should return a token', async function() {
     let user = 'test@example.com';
     let password = 'test';
@@ -26,3 +26,14 @@ describe.only('/login', function() {
     });
   });
 });
+
+//utility function for other api tests
+module.exports.login = async function() {
+  let user = 'test@example.com';
+  let password = 'test';
+  let res = await request(app).post('/login').send({
+    email: user,
+    password
+  });
+  return res.body.data.token;
+}
