@@ -32,8 +32,8 @@ describe('authentication', function() {
   });
 
   describe('#authenticate', function() {
-    it('should authenticate a valid token', async function() {
-      let res = await authenticate(token);
+    it('should authenticate a valid token', function() {
+      let res = authenticate(token);
       expect(res._id).to.not.be.null;
     });
   });
