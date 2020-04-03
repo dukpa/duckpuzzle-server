@@ -4,6 +4,7 @@ var logger = require('morgan');
 const config = require("config");
 const cors = require('cors');
 
+const {buildErrorResponse} = require('./services/json');
 var router = require('./routes');
 
 var app = express();
@@ -28,6 +29,12 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
+  if (typeof err === 'string') {
+    err = {
+      name: err,
+      message: err
+    }
+  }
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
@@ -47,11 +54,13 @@ app.use(function(err, req, res, next) {
   }
 
   if (err.status === 500) {
-    console.error(err);
+    console.error(`${err.name}: ${err.message}`);
   }
 
-  res.status(err.status);
-  res.send(err);
+  let resp = buildErrorResponse(req, err);
+
+  res.status(resp.error.status);
+  res.send(resp);
 });
 
 module.exports = app;

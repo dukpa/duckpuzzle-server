@@ -21,8 +21,12 @@ function buildResponse(req, data) {
       kind: data.constructor.modelName,
       items: [data.toObject()]
     });
+  } else if (Array.isArray(data)) {
+    throw 'Not implemented'
+  } else if (typeof data === 'object') {
+    return _buildResponse(req, data);
   } else {
-    throw 'Not implemented';
+    throw 'Not implemented'
   }
 }
 

@@ -3,14 +3,17 @@ const config = require('config')
 const {User} = require('../models/static/user');
 
 const BAD_USER_PASS = {
+  status: 401,
   code: 'BAD_USER_PASS',
   message: 'The user name and/or password is incorrect'
 };
 const MISSING_TOKEN = {
+  status: 401,
   code: 'MISSING_TOKEN',
   message: 'No JWT token was provided'
 };
 const INVALID_TOKEN = {
+  status: 401,
   code: 'INVALID_TOKEN',
   message: 'The provided token was not valid'
 };
