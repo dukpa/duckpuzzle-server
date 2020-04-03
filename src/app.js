@@ -1,13 +1,13 @@
-var createError = require('http-errors');
-var express = require('express');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const logger = require('morgan');
 const config = require("config");
 const cors = require('cors');
 
-const {buildErrorResponse} = require('./services/json');
-var router = require('./routes');
+const router = require('./routes');
+const handleError = require('./middleware/errors');
 
-var app = express();
+const app = express();
 
 app.use(cors());
 
@@ -31,39 +31,6 @@ app.use(function(req, res, next) {
 });
 
 // error handler
-app.use(function(err, req, res, next) {
-  if (typeof err === 'string') {
-    err = {
-      name: err,
-      message: err
-    }
-  }
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  if (err.isJoi) {
-    err = createError(400, {
-      name: err.name,
-      details: err.details
-    });
-  }
-  
-  if (!err) {
-    err = createError(500);
-  }
-
-  if (!err.status) {
-    err.status = 500;
-  }
-
-  if (err.status === 500) {
-    console.error(`${err.name}: ${err.message}`);
-  }
-
-  let resp = buildErrorResponse(req, err);
-
-  res.status(resp.error.status);
-  res.send(resp);
-});
+app.use(handleError);
 
 module.exports = app;
