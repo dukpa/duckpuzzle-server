@@ -1,7 +1,7 @@
 const {expect} = require('chai');
 const {login, request} = require('./api-test-utils');
 
-describe.only('/request', async function() {
+describe('/request', async function() {
   let token;
 
   before(async function() {

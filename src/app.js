@@ -16,7 +16,10 @@ if (!config.get("myprivatekey")) {
   process.exit(1);
 }
 
-app.use(logger('dev'));
+if (typeof global.it !== 'function') {
+  //don't attach logger if in a unit test
+  app.use(logger('dev'));
+}
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
