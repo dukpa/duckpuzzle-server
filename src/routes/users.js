@@ -3,20 +3,17 @@ const { User } = require("../models/static/user");
 const express = require("express");
 const router = express.Router();
 const registration = require("../services/registration");
+const {buildResponse} = require('services/json');
 
 router.get("/current", auth, async (req, res) => {
   const user = await User.findById(req.user._id).select("_id name email");
-  res.send(user);
+  res.send(buildResponse(req, user));
 });
 
 router.post("/", async (req, res, next) => {
   try {
     let user = await registration.newUser(req.body);
-    res.send({
-      _id: user._id,
-      name: user.name,
-      email: user.email
-    });
+    res.send(buildResponse(req, user));
   } catch(e) {
     next(e);
   }
