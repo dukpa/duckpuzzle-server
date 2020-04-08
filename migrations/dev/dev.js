@@ -126,7 +126,8 @@ async function migrateClients() {
 
 async function migrateUsers() {
   console.log('  Adding test users');
-  await newUser({name: 'Tester', email: 'test@example.com', password: 'test'})
+  await newUser({name: 'Tester', email: 'test@example.com', password: 'test'});
+  await newUser({name: 'Jimmy Duke', email: 'jimmy@example.com', password: 'test'});
   console.log('  Done adding test users');
 }
 
