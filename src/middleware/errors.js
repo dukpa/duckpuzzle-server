@@ -1,3 +1,4 @@
+const createError = require('http-errors');
 const {buildErrorResponse} = require('services/json');
 
 function handleError(err, req, res, next) {

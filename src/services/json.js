@@ -15,14 +15,17 @@ function _buildResponse(req, data, error) {
   return json;
 }
 
-function buildResponse(req, data) {
+function buildResponse(req, data, kind) {
   if (data instanceof mongoose.Document) {
     return _buildResponse(req, {
       kind: data.constructor.modelName,
       items: [data.toObject()]
     });
   } else if (Array.isArray(data)) {
-    throw 'Not implemented'
+    return _buildResponse(req, {
+      kind,
+      items: data.map(item => item.toObject())
+    });
   } else if (typeof data === 'object') {
     return _buildResponse(req, data);
   } else {
